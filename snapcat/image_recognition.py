@@ -1,12 +1,12 @@
 from google.cloud import vision
 
 
-def is_cat(image):
-    return has_label(image, 'cat')
+def is_cat(image_content):
+    return has_label(image_content, 'cat')
 
 
-def has_label(image, label_desc):
-    labels = get_labels_from_image(image)
+def has_label(image_content, label_desc):
+    labels = get_labels_from_image(image_content)
     wanted_label = None
     for label in labels:
         if label.description == label_desc:
@@ -20,7 +20,8 @@ def has_label(image, label_desc):
             return False
 
 
-def get_labels_from_image(image):
+def get_labels_from_image(image_content):
     vision_client = vision.Client()
-    result = vision_client.image(content=image)
-    return result.detect_labels()
+    image = vision_client.image(content=image_content)
+    labels = image.detect_labels()
+    return labels
